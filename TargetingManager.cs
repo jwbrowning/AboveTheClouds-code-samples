@@ -8,6 +8,7 @@ namespace Team3.Player
 {
 
     // Script to manage the camera targeting system, reminicient of z targeting in Zelda games
+    // contains event-driven logic and handles enabling and disabling of "outline"/"highlight" shader material to make it obvious which enemy is targeted
     public class TargetingManager : MonoBehaviour
     {
         [SerializeField] private CinemachineVirtualCamera defaultCamera;
@@ -36,6 +37,7 @@ namespace Team3.Player
             Events.EventsPublisher.Instance.SubscribeToEvent("DeadEntity", CheckDeadEnemy);
         }
 
+        // event, called when an enemy is killed
         private void CheckDeadEnemy(object sender, object data)
         {
             if (((GameObject)data) == currentEnemy)
@@ -44,6 +46,7 @@ namespace Team3.Player
             }
         }
 
+        // event, called when user presses targeting key
         private void StartTargeting(object sender, object data)
         {
             targetingCamera.Priority = 10;
@@ -52,6 +55,7 @@ namespace Team3.Player
             StartCoroutine(Target());
         }
 
+        // event, called when user toggles targeting off
         private void StopTargeting(object sender, object data)
         {
             targetingCamera.Priority = 0;
@@ -61,6 +65,7 @@ namespace Team3.Player
             currentEnemy = null;
         }
 
+        // event for use when player swaps between enemies to target
         private void HandleTargetEvent(object sender, object data)
         {
             if (targeting)
@@ -73,6 +78,7 @@ namespace Team3.Player
             }
         }
 
+        // adds the outline/highlight material to the enemy's meshrenderer
         private void EnableOutline(GameObject enemy)
         {
             if (currentEnemy != null)
@@ -91,6 +97,7 @@ namespace Team3.Player
             }
         }
 
+        // removes the outline/highlight material to the enemy's meshrenderer
         private void DisableOutline(GameObject enemy)
         {
             if (currentEnemy != null)
@@ -113,6 +120,7 @@ namespace Team3.Player
             }
         }
 
+        // coroutine used to manage targeting until the player stops targeting or the enemy being targeted dies
         private IEnumerator Target()
         {
             currentEnemy = null;
@@ -137,6 +145,7 @@ namespace Team3.Player
             }
         }
 
+        // find closest enemy that is not targeted and target them
         private void TargetClosestEnemy()
         {
             DisableOutline(currentEnemy);
