@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Team3.Events;
 
+// Singleton Game State Machine, manages game states for loading, menu, pause, etc
 public class GameStateMachine 
 {
     public static GameState DefaultState = new DefaultState(),
